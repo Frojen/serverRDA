@@ -228,8 +228,8 @@ function rdaReset(on){
 	command(on, 2, MASK_RESET, RDA_RESET_ON, RDA_RESET_OFF)
 }
 
-var space = 0
-var band = 0
+var space = 0.1
+var band = 87
 var callBack = []
 
 function setFreq(freq){
@@ -258,17 +258,15 @@ function setVolume(valueVolume){
 }
 
 function getRdsReady(){
-	execute('registers=1&rdsReady=10', '/getRegisters')
-	callBack = function(valueReg){
-		valueReg &= MASK_RDS_READY
+	getCommand('registers=1&rdsReady=10', function(valueReg){
+		var result;
+		result = (parseInt(valueReg.get('rdsReady'), 10) & (~MASK_RDS_READY))
 		if (valueReg) {
-			alert('RDS готов')
-			//установить rds готов
+			document.getElementById('cb11').value = true
 		} else {
-			alert('RDS не готов')
-			//что делать????
-		}
-	}
+			document.getElementById('cb11').value = false
+		}		
+	})
 }
 
 function getFreq(){	
@@ -318,24 +316,23 @@ function getTuneError(){
 }
 
 function getRdsSync(){
-	execute('registers=1&rdsReady=10', '/getRegisters')
-	callBack = function(valueReg){
-		valueReg &= MASK_RDS_SYNC
+	getCommand('registers=1&rdsSync=10', function(valueReg){
+		valueReg = (parseInt(valueReg.get('rdsSync'), 10) & (~MASK_RDS_SYNC)
 		if (valueReg) {
-			alert('RDS синхронизирован')
+			document.getElementById('cb12').value = true
 		} else {
-			alert('RDS не синхронизирован')
+			document.getElementById('cb12').value = false
 		}
-	}
+	})		
 }
 
 function getStereo(){
 	getCommand('registers=1&reciveStereo=10', function(valueReg){
 		valueReg = (parseInt(valueReg.get('reciveStereo'), 10) & (~MASK_STEREO_MONO)
 		if (valueReg) {
-			alert('Прием стерео')
+			document.getElementById('cb10').value = true
 		} else {
-			alert('Прием моно')
+			document.getElementById('cb10').value = false
 		}
 	})	
 }
@@ -369,12 +366,18 @@ function nextCom(){
 	seekUp(true)
 	find(true)
 	afterTuneFinish(getFreq)
+	getStereo()
+	getRdsSync()
+	getRdsReady()
 }
 
 function prevCom(){
 	seekUp(false)
 	find(true)
 	afterTuneFinish(getFreq)
+	getStereo()
+	getRdsSync()
+	getRdsReady()
 }
 
 function add1(){
@@ -389,12 +392,24 @@ function add1(){
 	rng.innerHTML = fr
 	afterTuneFinish(getRSSI)
 	getSignal()
+	getRdsSync()
+	getRdsReady()
 }
 
 function sub1(){
-	seekUp(false)
-	find(true)
-	afterTuneFinish(getFreq)
+	var rng=document.getElementById('freq')
+	var fr = rng.innerHTML
+	if (fr == 87) {
+		fr = 108
+	} else {
+		fr -= 0.1
+	}
+	setFreq(fr)
+	rng.innerHTML = fr
+	afterTuneFinish(getRSSI)
+	getSignal()
+	getRdsSync()
+	getRdsReady()
 }
 
 function checkInput1(elem){
