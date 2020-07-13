@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+	<meta charset="utf-8">
+	<script src="js/app.js"></script>
+	<title>Управление радио</title>
+  </head>
+  <body>
+    <h1>Управление модулем RDA5807M</h1>
+    <form method="post" enctype="application/x-www-form-urlencoded">
+		<div>Частота:</div>
+		<input type="text" id="valueFreq" name="frequency"><br>
+		<input type="button" value="Установить" onclick="setFrequency()">
+		<input type="button" name="prev" value="Предыдущая станция" onclick="prevCom()">
+		<input type="button" name="prev1" value="-0.1" onclick="add1()">
+		<div id="freq">88.4:</div>
+		<input type="button" name="next1" value="+0.1" onclick="sub1()">
+		<input type="button" name="next" value="Следующая станция" onclick="nextCom()">
+		<div>Громкость:</div>
+		<div id="vol">11</div>
+		<input type="range" id="r1" name="volume" min=0 max=15 oninput="chVolume()">
+		<div>Включить радио:</div>		
+		<input type="checkbox" id="cb8" name="onOff" onchange="checkInput8('cb8')">
+		<div>Выключить звук:</div>		
+		<input type="checkbox" id="cb1" name="mute" onchange="checkInput1('cb1')" checked>
+		<div>Басы:</div>		
+		<input type="checkbox" id="cb2" name="bass" onchange="checkInput2('cb2')">
+		<div>Прием RDS:</div>		
+		<input type="checkbox" id="cb3" name="rds" onchange="checkInput3('cb3')">
+		<div>Включить стерео:</div>		
+		<input type="checkbox" id="cb4" name="stereo" onchange="checkInput4('cb4')" checked>
+		<div>Шумоподавление:</div>		
+		<input type="checkbox" id="cb5" name="noise" onchange="checkInput5('cb5')">
+		<div>Шумоподавление soft:</div>		
+		<input type="checkbox" id="cb6" name="noiseSoft" onchange="checkInput6('cb6')">
+		<div id="deSet">Постоянная времени 75 мск</div>		
+		<input type="checkbox" id="cb7" name="deSetCheck" onchange="checkInput7('cb7')">
+		<div id="signalYes">Сигнал есть:</div>		
+		<input type="checkbox" id="cb9" name="signalRadio"">
+		<div id="stereoRecive">Передача стерео:</div>		
+		<input type="checkbox" id="cb10" name="signalRadioStereo"">
+		<div>Уровень сигнала:</div>	
+		<progress id="RSSI" value="0" max="128"></progress>
+    </form>
+	<dim>RDS:</dim>
+  </body>
+</html>
